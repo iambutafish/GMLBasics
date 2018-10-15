@@ -1,0 +1,62 @@
+key_right = keyboard_check(vk_right);
+key_left = -keyboard_check(vk_left);
+key_jump = keyboard_check_pressed(vk_space);
+key_jump_held = keyboard_check(vk_space);
+key_attack = keyboard_check_pressed(ord("Z"))
+key_shift = keyboard_check_pressed(vk_shift);
+
+
+
+
+//Move State
+
+{
+move = key_left + key_right;
+hsp = move * movespeed;
+if (vsp < 10) vsp += grav;
+
+if (place_meeting(x,y+1,obj_floor))
+{
+vsp = key_jump * -jumpspeed
+}
+
+if (vsp < 0) && (!key_jump_held) vsp = max(vsp,0)
+    
+//Horizontal Collision
+if (place_meeting(x+hsp,y,obj_wall))
+{
+while(!place_meeting(x+sign(hsp),y,obj_wall))
+{
+x += sign(hsp);
+}
+hsp = 0;
+}
+x += hsp;
+    
+    
+//Vertical Collision
+if (place_meeting(x,y+vsp,obj_floor))
+{
+while(!place_meeting(x,y+sign(vsp),obj_floor))
+{
+y += sign(vsp);
+}
+vsp = 0;
+
+}
+y += vsp;
+}
+
+
+
+//Animate
+if (move!=0) image_xscale = move;
+if (place_meeting(x,y+1,obj_floor))
+{
+    if (hsp!=0) sprite_index = spr_playerwalk; else sprite_index = spr_playeridleright;
+}
+else
+{
+    if (vsp > 0) sprite_index = spr_playerfall; else sprite_index = spr_playerjump;
+}
+image_speed = 0.5;
