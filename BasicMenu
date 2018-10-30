@@ -17,3 +17,49 @@ switch (mpos) //Menu script!
     default: break;
 }
 
+//In object, initialize array
+menu[0] = "new game"; //Menu array
+menu[1] = "load";
+menu[2] = "settings";
+menu[3] = "quit";
+
+space = 64;  //Spacing between selections
+mpos = 0;  //Menu position
+
+
+//For menu navigation (moving the selector)
+var move = 0;
+move -= max(keyboard_check_pressed(vk_up),keyboard_check_pressed(ord("W")),0);
+move += max(keyboard_check_pressed(vk_down),keyboard_check_pressed(ord("S")),0);
+
+if (move !=0)
+{
+    mpos += move;
+    if (mpos <0) mpos = array_length_1d(menu) - 1;
+    if (mpos > array_length_1d(menu) - 1) mpos = 0;
+}
+
+var push;
+push = max(keyboard_check_released(vk_enter),keyboard_check_released(vk_shift),keyboard_check_released(vk_space),0);
+if (push == 1) scr_menu();
+
+
+//Draw the set to screen (might need a draw event)
+draw_set_halign(fa_left);
+draw_set_valign(fa_middle);
+draw_set_font(fnt_menu);
+draw_set_color(c_white);
+
+var m;
+for (m = 0; m < array_length_1d(menu); m += 1)
+{
+    draw_text(x + space, y + (m * space), string_hash_to_newline(string(menu[m])))
+}
+
+draw_sprite(sprite_index, 0, x + 16, y + mpos * space);
+
+
+
+//Required sprites/scripts/objects
+//spr_selector, scr_menu (from above), fnt_menu, obj_selector
+//Menu can have a blank background, room for improvement and customization later on
